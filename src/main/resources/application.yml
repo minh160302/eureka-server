@@ -6,8 +6,11 @@ server:
   port: ${PORT:8761}
 
 eureka:
+#  server:
+#    enableSelfPreservation: false
   instance:
     appname: eureka-main-server
+    hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false

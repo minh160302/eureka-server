@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  eureka_server:
+    image: "eureka/server"
+    ports:
+      - "8761:8761"
+    networks:
+      default:
+        ipv4_address: 172.21.0.5
+  trello_service:
+    image: "new__trello_service"
+    ports:
+      - "8200:8200"
+    networks:
+      default:
+        ipv4_address: 172.21.0.4
+    depends_on:
+      - eureka_server
+    links:
+      - eureka_server
+
+  auth_service:
+    image: "new__auth_service"
+    ports:
+      - "8300:8300"
+    networks:
+      default:
+        ipv4_address: 172.21.0.3
+    depends_on:
+      - eureka_server
+    links:
+      - eureka_server
+
+  zuul:
+    image: "new__eureka/zuul"
+    ports:
+      - "8762:8762"
+    depends_on:
+      - eureka_server
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
